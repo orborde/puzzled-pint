@@ -13,11 +13,12 @@ def decode(x, first=1):
     >>> decode(1)
     'a'
     >>> decode(27)
-    '?'
+    'a'
     >>> decode(26)
     'z'
     """
     x -= first
+    x = x % 26
     if x < 0 or x > 25:
         return '?'
     return chr(ord('a') + x)

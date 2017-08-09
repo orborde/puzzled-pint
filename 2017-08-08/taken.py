@@ -76,7 +76,7 @@ COUNTS = [
 ]
 
 WORDS = open('/usr/share/dict/words').read().split()
-WORDS = filter(lambda s: s.isalpha() and s.islower(), WORDS)
+WORDS = filter(lambda s: s.isalpha(), WORDS)
 WORDS = set(w.upper() for w in WORDS)
 
 print len(WORDS), 'words'
@@ -93,6 +93,7 @@ print sum(len(f) for f in FRAGMENTS), 'total fragment letters'
 assert len(COUNTS) == 23
 print sum(COUNTS), 'blanks',
 print '(',sum(COUNTS) - sum(len(f) for f in FRAGMENTS), 'vs fragments)'
+print  '/2 =', sum(COUNTS)/2, sum(COUNTS)/2 - sum(len(f) for f in FRAGMENTS)
 
 def findwords(prefix='', fragments=FRAGMENTS):
     if prefix in WORDS:
@@ -118,4 +119,35 @@ for word in findables:
 
 #for length, words in by_lengths.iteritems():
 #    print length, ' '.join(sorted(set(words)))
-print 7, ' '.join(sorted(set(by_lengths[7])))
+
+# ha ha i had it totally wrong
+LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+assert len(LETTERS) == 26
+import itertools
+pair_sets = {}
+for left, right in itertools.permutations(FRAGMENTS, r=2):
+    if (left,right) in pair_sets:
+        print '...dropping', left,right
+        continue
+    words = []
+    for middle in LETTERS:
+        word = left+middle+right
+        print left,middle,right,word,
+        if word in WORDS:
+            print 'YES',
+            words.append(word)
+            print words,
+        print
+    if len(words) >= 2:
+        key = left,right
+        assert key not in pair_sets
+        print 'stick in', words
+        pair_sets[key] = words
+
+for i in range(1,10):
+    print i
+    for left,right in pair_sets.iterkeys():
+        if len(left)+len(right)+1 == i:
+            print ' '.join(set(pair_sets[left,right]))
+    print
+

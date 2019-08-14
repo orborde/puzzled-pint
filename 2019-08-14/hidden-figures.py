@@ -15,8 +15,8 @@ for w in ALL_WORDS:
     for c in w:
         ALL_LETTERS.add(c)
 
-ALL_LETTERS_MINUS_C = sorted(ALL_LETTERS.difference(set(C)))
-print(len(ALL_LETTERS_MINUS_C))
+ALL_LETTERS_MINUS = sorted(ALL_LETTERS.difference(set('CB')))
+print(len(ALL_LETTERS_MINUS))
 
 def eq1(f):
     return f(ERUP) == (f(OUTPUT) // f(MY))
@@ -29,11 +29,15 @@ def solved(f):
 
 from tqdm import tqdm
 
-for perm in tqdm(itertools.permutations([0,1,3,4,5,6,7,8,9], r=len(ALL_LETTERS_MINUS_C))):
-    assignment = {l: i for l,i in zip(ALL_LETTERS_MINUS_C, perm)}
+for perm in itertools.permutations([0,1,3,4,5,6,7,8,9], r=len(ALL_LETTERS_MINUS)):
+    assignment = {l: i for l,i in zip(ALL_LETTERS_MINUS, perm)}
 
     assert C not in assignment
     assignment[C] = 2
+    assert 'B' not in assignment
+    assignment['B'] = 0
+
+    #print(assignment)
 
     def mapping(word):
         value = int(''.join(str(assignment[c]) for c in word))
@@ -50,4 +54,10 @@ for perm in tqdm(itertools.permutations([0,1,3,4,5,6,7,8,9], r=len(ALL_LETTERS_M
                 phrase.append('?')
         phrase = ''.join(phrase)
 
-        print(sorted(assignment.items()), phrase)
+        vv = 51*mapping('CUBE') + (17 * mapping('ROOT')) - mapping('YUM')
+        answer = []
+        for digit in str(vv):
+            answer.append(revmap[int(digit)])
+        answer = ''.join(answer)
+
+        print(phrase, answer)

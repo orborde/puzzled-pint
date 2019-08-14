@@ -35,20 +35,20 @@ foldmap = {n: list(unfold(v)) for n,v in basemap.items()}
 numbers = sorted(foldmap.keys())
 possibles = [foldmap[n] for n in numbers]
 
-crypt=(
+initialcrypt = '54474746588418185653561827486'
+finalcrypt=(
     '25954142319878168'
     '184878978881248292'
 )
 
-import itertools
-for assignment in itertools.product(*possibles):
-    assignment = {n:v for n,v in zip(numbers, assignment)}
-    sequence = ''.join(assignment[int(q)] for q in crypt)
+initialmorse=''.join(basemap[int(q)] for q in initialcrypt)
 
+import itertools
+for sequence in unfold(initialmorse):
     printed=False
     for dec in morse.morsedec(sequence):
         if not printed:
-            print(assignment)
+            print(sequence)
             printed=True
 
         print(dec)

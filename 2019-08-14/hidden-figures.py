@@ -19,17 +19,17 @@ ALL_LETTERS_MINUS_C = sorted(ALL_LETTERS.difference(set(C)))
 print(len(ALL_LETTERS_MINUS_C))
 
 def eq1(f):
-    return f(ERUP) * f(MY) == f(OUTPUT)
+    return f(ERUP) == (f(OUTPUT) // f(MY))
 
 def eq2(f):
-    return f(CORRECT) * f(C) == f(MERCURY)
+    return f(C) == (f(MERCURY) // f(CORRECT))
 
 def solved(f):
     return eq1(f) and eq2(f)
 
 from tqdm import tqdm
 
-for perm in tqdm(itertools.product(range(10), repeat=len(ALL_LETTERS_MINUS_C))):
+for perm in tqdm(itertools.permutations([0,1,3,4,5,6,7,8,9], r=len(ALL_LETTERS_MINUS_C))):
     assignment = {l: i for l,i in zip(ALL_LETTERS_MINUS_C, perm)}
 
     assert C not in assignment
@@ -41,4 +41,13 @@ for perm in tqdm(itertools.product(range(10), repeat=len(ALL_LETTERS_MINUS_C))):
         return value
 
     if solved(mapping):
-        print(sorted(assignment.items()))
+        revmap = {v:k for k,v in assignment.items()}
+        phrase = []
+        for i in range(10):
+            if i in revmap:
+                phrase.append(revmap[i])
+            else:
+                phrase.append('?')
+        phrase = ''.join(phrase)
+
+        print(sorted(assignment.items()), phrase)
